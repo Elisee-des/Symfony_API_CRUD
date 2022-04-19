@@ -70,5 +70,13 @@ class ApiController extends AbstractController
         return $this->json(["Supprimer avec Success"]);
     }
 
+    /**
+     * @Route("/api/fetchall_api/", name="fetchall_api", methods={"GET"})
+     */
+    public function fetchall_api(CrudRepository $crudRepository): Response
+    {
+        $data = $crudRepository->findAll();
 
+        return $this->json([$data]);
+    }
 }
