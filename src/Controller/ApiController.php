@@ -41,7 +41,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/update_api/{id}", name="update_api", methods={"PUT"})
      */
-    public function update_api(Request $request, ManagerRegistry $managerRegistry, CrudRepository $crudRepository, $id): Response
+    public function update_api($id, Request $request, ManagerRegistry $managerRegistry, CrudRepository $crudRepository): Response
     {
         $data = $crudRepository->find($id);
         $parameter = json_decode($request->getContent(), true);
@@ -55,4 +55,20 @@ class ApiController extends AbstractController
 
         return $this->json(["Modifier avec Success"]);
     }
+
+    /**
+     * @Route("/api/delete_api/{id}", name="delete_api", methods={"DELETE"})
+     */
+    public function delete_api($id, ManagerRegistry $managerRegistry, CrudRepository $crudRepository): Response
+    {
+        $data = $crudRepository->find($id);
+
+        $em = $managerRegistry->getManager();
+        $em->remove($data);
+        $em->flush();
+
+        return $this->json(["Supprimer avec Success"]);
+    }
+
+
 }
