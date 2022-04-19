@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Crud;
+use App\Repository\CrudRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +30,29 @@ class ApiController extends AbstractController
 
         $crud->setTitle($parameter['title']);
         $crud->setContent($parameter['content']);
-        
+
         $em = $managerRegistry->getManager();
         $em->persist($crud);
         $em->flush();
 
         return $this->json(["Inserer avec Success"]);
+    }
+
+    /**
+     * @Route("/api/update_api/{id}", name="update_api", methods={"PUT"})
+     */
+    public function update_api(Request $request, ManagerRegistry $managerRegistry, CrudRepository $crudRepository, $id): Response
+    {
+        $data = $crudRepository->find($id);
+        $parameter = json_decode($request->getContent(), true);
+
+        $data->setTitle($parameter['title']);
+        $data->setContent($parameter['content']);
+
+        $em = $managerRegistry->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return $this->json(["Modifier avec Success"]);
     }
 }
